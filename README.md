@@ -1,8 +1,6 @@
 Backend
 =======
 
-This backend makes use of MongoDB, encryption, express, and node.js 
-
 Student        - Gatorlink   
 ----------------------------
 
