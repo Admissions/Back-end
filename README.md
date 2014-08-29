@@ -3,4 +3,13 @@ Backend
 
 This backend makes use of MongoDB, encryption, spreadsheet input, and admissions data summation and calculation.
 
-Ryan Young ryoubg48@ufl.edu
+Student        - Gatorlink   
+----------------------------
+
+Kevin Cheddar     - kevincheddar
+
+Patrick Emami     - pemami  
+
+Henry Nguyen      - nhgeunyreyn
+
+
