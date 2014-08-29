@@ -6,7 +6,7 @@ This backend makes use of MongoDB, encryption, spreadsheet input, and admissions
 Student        - Gatorlink   
 ----------------------------
 
-Kevin Cheddar     - kevincheddar
+Kevin Cheddar     - kcheddar
 
 Patrick Emami     - pemami  
 
