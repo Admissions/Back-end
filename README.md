@@ -1,7 +1,7 @@
 Backend
 =======
 
-This backend makes use of MongoDB, encryption, spreadsheet input, and admissions data summation and calculation.
+This backend makes use of MongoDB, encryption, express, and node.js 
 
 Student        - Gatorlink   
 ----------------------------
