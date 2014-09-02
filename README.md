@@ -4,10 +4,10 @@ Back-end
 Student        - Gatorlink   
 ----------------------------
 
-Kevin Cheddar     - kcheddar
+Kevin Cheddar       - kcheddar
 
-Patrick Emami     - pemami  
+Patrick Emami       - pemami  
 
-Henry Nguyen      - neuroh
+Henry Nguyen        - neuroh
 
-
+Peyt Spencer Dewar  -
