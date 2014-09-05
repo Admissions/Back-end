@@ -8,3 +8,4 @@ Kevin Cheddar       - kcheddar
 
 Henry Nguyen        - neuroh
 
+Patrick Gauvin      - pgauvin
