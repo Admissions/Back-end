@@ -19,6 +19,8 @@ var AdmissionsSchema = new Schema({
         ufid: Number,
         previous_application: Boolean,
         previous_attendance: Boolean,
+	application_started: Boolean,
+	application_complete: Boolean,
         dob: Date,
         gender: String,
         nationality: String,
