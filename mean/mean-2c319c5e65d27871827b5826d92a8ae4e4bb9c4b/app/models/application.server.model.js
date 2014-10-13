@@ -6,11 +6,10 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
-var validator = function(property) {
-//	return (property.length != null);
-//	return ((this.provider !== 'local' && !this.updated) || property.length);
+var simpleStringValidator = function(property) {
 	return property.length > 0;
-}
+};
+var nameValidate = [simpleStringValidator, 'Put your name in, yo'];
 
 var ApplicationSchema = new Schema({
 	personal_info: {
@@ -18,17 +17,17 @@ var ApplicationSchema = new Schema({
 			first: {
 				type: String,
 				default: '',
-				validate: [validator, 'Put your name in, yo']
+				validate: nameValidate
 			},
 			middle: {
 				type: String,
 				default: '',
-				validate: [validator, 'Put your name in, yo']
+				validate: nameValidate
 			},
 			last: {
 				type: String,
 				default: '',
-				validate: [validator, 'Put your name in, yo']
+				validate: nameValidate
 			},
 			suffix: {
 				type: String,
@@ -37,7 +36,7 @@ var ApplicationSchema = new Schema({
 			other_names: {
 				type: String,
 				default: '',
-			}
+			},
 		},
 		has_ssn: {
 			type: Boolean,
@@ -47,8 +46,10 @@ var ApplicationSchema = new Schema({
 			type: Number
 		},
         ufid: {
-			type: Number,
-		},
+		type: Number,
+		unique: true,//'For now, the name will uniquely id things',
+		required: true//'Required'
+	},
         previous_application: {
 			type: Boolean,
 			default: false

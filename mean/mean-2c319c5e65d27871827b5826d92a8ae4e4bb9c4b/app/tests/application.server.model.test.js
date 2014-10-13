@@ -25,7 +25,8 @@ describe('Application Model Unit Tests:', function() {
 					last: 'Toe',
 					suffix: 'Foo',
 					other_names: 'JJJ'
-				}
+				},
+				ufid: 1
 			}
 		});
 		app2 = new Application({
@@ -36,7 +37,8 @@ describe('Application Model Unit Tests:', function() {
 					last: 'Toe',
 					suffix: 'Foo',
 					other_names: 'JJJ'
-				}
+				},
+				ufid: 1
 			}
 		});
 
@@ -55,6 +57,12 @@ describe('Application Model Unit Tests:', function() {
 			app.save(done);
 		});
 
+//		it('should be able to remove without problems', function(done) {
+//			app.save();
+//			app.remove(done);
+//		});
+
+//		NOT WORKING YET
 //		it('should fail to save an existing application again', function(done) {
 //			app.save();
 //			return app2.save(function(err) {
