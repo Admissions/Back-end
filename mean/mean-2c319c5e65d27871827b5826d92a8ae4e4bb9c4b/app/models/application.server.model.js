@@ -3,49 +3,168 @@
 /**
 * Module dependencies.
 */
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose'),
+	Schema = mongoose.Schema;
 
-var AdmissionsSchema = new Schema({
+var ApplicationSchema = new Schema({
     personal_info: {
         name: {
-            first: String,
-            middle: String,
-            last: String,
-            suffix: String,
-            other_names: String
+            first: {
+				type: String,
+				default: ''
+			},
+            middle: {
+				type: String,
+				default: ''
+			},
+            last: {
+				type: String,
+				default: ''
+			},
+            suffix: {
+				type: String,
+				default: ''
+			},
+            other_names: {
+				type: String,
+				default: ''
+			}
         },
-        ssn: Number,
-        ufid: Number,
-        previous_application: Boolean,
-        previous_attendance: Boolean,
-	application_started: Boolean,
-	application_complete: Boolean,
+		has_ssn: {
+			type: Boolean,
+			default: false
+		},
+        ssn: {
+			type: Number
+		},
+        ufid: {
+			type: Number,
+		},
+        previous_application: {
+			type: Boolean,
+			default: false
+		},
+        previous_attendance: {
+			type: Boolean,
+			default: false
+
+		},
+		application_started: {
+			type: Boolean,
+			default: false
+		},
+		application_complete: {
+			type: Boolean,
+			default: false
+		},
         dob: Date,
-        gender: String,
-        nationality: String,
+		bd: {
+			month: {
+				type: String,
+				default: ''
+			},
+			day: {
+				type: String,
+				default: ''
+			},
+			year: {
+				type: Number
+			},
+		},
+        gender: {
+			type: String,
+			default: ''
+		},
+        nationality: {
+			type: String,
+			default: ''
+		},
         ethnicity: {
-            hispanic: Boolean,
-            ethnicity: Number
+            hispanic: {
+				type: Boolean,
+				default: false
+			},
+            american_indian: {
+				type: Boolean,
+				default: false
+			},
+			asian: {
+				type: Boolean,
+				default: false
+			},
+			black: {
+				type: Boolean,
+				default: false
+			},
+			pacific_islander: {
+				type: Boolean,
+				default: false
+			},
+			white: {
+				type: Boolean,
+				default: false
+			}
         },
-        email: String,
+        email: {
+			type: String,
+			default: ''
+		},
         phone: {
             personal: {
-                number: Number,
-                us: Boolean
+                number: {
+					type: Number
+				},
+                call: {
+					type: String,
+					default: ''
+				},
+			
             },
             work: {
-                number: Number,
-                us: Boolean
+                number: {
+					type: Number,
+				},
+                call: {
+					type: String,
+					default: ''
+				},
             },
             cell: {
-                number: Number,
-                us: Boolean
+                number: {
+					type: Number
+				},
+                call: {
+					type: String,
+					default: ''
+				},
             }
         },
         address: {
-            permanent: [ String ],
-            current: [ String ],
+            permanent: {
+				street: {
+					type: String,
+					default: ''
+				},
+				city: {
+					type: String,
+					default: ''
+				},
+				state: {
+					type: String,
+					default: ''
+				},
+				country: {
+					type: String,
+					default: ''
+				}
+			},
+            current: {
+				street: String,
+				city: String,
+				state: String,
+				country: String,
+				zip: String
+			},
             valid_until: Date
         },
         emergency_contact: {
@@ -54,27 +173,39 @@ var AdmissionsSchema = new Schema({
                 middle: String,
                 last: String,
                 suffix: String,
-                other_names: String
+                other_names: String,
+                relationship: String
             },
-            relationship: String,
-            address: [ String ],
+            address: {
+				street: String,
+				city: String,
+				state: String,
+				country: String,
+				zip: String
+            },
             phone: {
                 personal: {
                     number: Number,
-                    us: Boolean
-                },
+                    us: String,
+                    intl: String
+					},
+					
                 work: {
                     number: Number,
-                    us: Boolean
-                },
+                    us: String,
+                    intl: String
+					},
+
                 cell: {
                     number: Number,
-                    us: Boolean
+                    us: String,
+                    intl: String
                 }
             }
         },
         veteran_status: {
-            active_veteran_no: Number,
+
+            active_veteran: Boolean,
             post_sep11: Boolean,
             eligible_va_benefits: Boolean
         },
@@ -85,16 +216,68 @@ var AdmissionsSchema = new Schema({
     },
     special_programs_info: {
         special_programs_application: {
-            famu_feeder: Boolean,
-            fullbright_scholar: Boolean,
-            mcnair_scholar: Boolean,
-            mcknight_scholar: Boolean,
-            national_science_foundation_fellowship: Boolean,
-            national_institutes_of_health_fellowship: Boolean,
-            other: String
-            /* check if you are the following?? */
+            famu_feeder: {
+				type: String,
+				default: ''
+			},
+            fullbright_scholar: {
+				type: String,
+				default: ''
+			},
+			please_identify_program: {
+				type: String,
+				default: ''
+			},
+            mcnair_scholar: {
+				type: String,
+				default: ''
+			},
+            mcknight_scholar: {
+				type: String,
+				default: ''
+			},
+            national_science_foundation_fellowship: {
+				type: String,
+				default: ''
+			},
+            national_institutes_of_health_fellowship: {
+				type: String,
+				default: ''
+			},
+            other: {
+				scholarship: {
+					type: String,
+					default: ''
+				},
+				explain: {
+					type: String,
+					default: ''
+				}
+			},
+            check_following: {
+				assistantship: {
+					type: Boolean,
+					default: false
+				},
+				distance_learning: {
+					type: Boolean,
+					default: false
+				},
+				fellowship: {
+					type: Boolean,
+					default: false
+				},
+				joint_UF_degree: {
+					type: Boolean,
+					default: false
+				},
+				three_two_program: {
+					type: Boolean,
+					default: false
+				}
+			}/* check if you are the following?? */
         },
-        supporting_documentation: {
+        supporting_documentation: { /* TBD upload files */ 
             name: String,
             file: Buffer
         }
@@ -111,20 +294,89 @@ var AdmissionsSchema = new Schema({
     },
     education_and_activities: {
         undergraduate: {
-            major: String,
-            specialization: String
+            major: {
+				type: String,
+				default: ''
+			},
+            specialization: {
+				type: String,
+				default: ''
+			}
         },
-        colleges: [ String ],
-        self_reported_gpa: Number,
+        self_reported_gpa: {
+
+        	GPA: {
+
+        		type: Number,
+        		default: 0
+        	},
+			A: {
+				type: Number,
+				default: 0
+			},
+			A_minus: {
+				type: Number,
+				default: 0
+			},
+			B_plus: {
+				type: Number,
+				default: 0
+			},
+			B: {
+				type: Number,
+				default: 0
+			},
+			B_minus: {
+				type: Number,
+				default: 0
+			},
+			C_plus: {
+				type: Number,
+				default: 0
+			},
+			C: {
+				type: Number,
+				default: 0
+			},
+			C_minus: {
+				type: Number,
+				default: 0
+			},
+			D_plus: {
+				type: Number,
+				default: 0
+			},
+			D: {
+				type: Number,
+				default: 0
+			},
+			D_minus: {
+				type: Number,
+				default: 0
+			},
+			F: {
+				type: Number,
+				default: 0
+			}
+		},
         test_scores: {
             gre: {
-                date: Date,
-                verbal: Number,
+            	taken: {
+            		type:Boolean,
+                	default: false
+            	},
+            	date:Date,
+            	verbal: Number,
                 quantitative: Number,
                 analytical_writing: Number,
                 total: Number
             },
+           
             gmat: {
+            	taken: {
+            		type:Boolean,
+                	default: false
+            	},
                 date: Date,
                 verbal: Number,
                 quantitative: Number,
@@ -133,27 +385,43 @@ var AdmissionsSchema = new Schema({
                 total: Number
             },
             mat: {
+            	taken: {
+            		type:Boolean,
+                	default: false
+            	},
                 date: Date,
-                score: String /* String? */
+                score: Number /* String? */
             },
             fe: {
+            	taken: {
+            		type:Boolean,
+                	default: false
+            	},
                 date: Date,
-                score: String /* String? */
+                score: Number /* String? */
             },
             toefl: {
+            	taken: {
+            		type:Boolean,
+                	default: false
+            	},
                 paper_date: Date,
                 listening: Number,
                 writing: Number,
                 reading: Number,
                 total: Number,
                 internet_date: Date,
-                reading: Number,
-                listening: Number,
-                speaking: Number,
-                writing: Number,
-                total: Number
+                readingi: Number,
+                listeningi: Number,
+                speakingi: Number,
+                writingi: Number,
+                totali: Number
             },
             ielts: {
+            	taken: {
+            		type:Boolean,
+                	default: false
+            	},
                 date: Date,
                 listening: Number,
                 writing: Number,
@@ -162,6 +430,10 @@ var AdmissionsSchema = new Schema({
                 total: Number
             },
             melab: {
+            	taken: {
+            		type:Boolean,
+                	default: false
+            	},
                 date: Date,
                 composition: Number,
                 listening: Number,
@@ -170,13 +442,19 @@ var AdmissionsSchema = new Schema({
             },
             uf_lang_institute_program: Boolean
         },
-        activities: [ {
-            activity: String,
+        activities: {
+            activity: {
+				type: String,
+				default: ''
+			},
             city: String,
             country: String,
             state: String,
-            from: String
-        } ],
+            from: String,
+            day1: String,
+            to: String,
+            day2: String
+        },
         resume: {
             name: String,
             file: Buffer
@@ -187,8 +465,83 @@ var AdmissionsSchema = new Schema({
         }
     },
     residency_affadivit: {
-        florida_residence_categories: {
-            /* fields not defined yet */
+            florida_residence_categories: {
+            A: {
+				type: Boolean,
+				default: false
+			},
+            B: {
+				type: Boolean,
+				default: false
+			},
+			C: {
+				type: Boolean,
+				default: false
+			},
+			D: {
+				type: Boolean,
+				default: false
+			},
+			E: {
+				type: Boolean,
+				default: false
+			},
+			F: {
+				type: Boolean,
+				default: false
+			},
+			G: {
+				type: Boolean,
+				default: false
+			},
+			H: {
+				type: Boolean,
+				default: false
+			},
+			I: {
+				type: Boolean,
+				default: false
+			},
+			J: {
+				type: Boolean,
+				default: false
+			},
+			K: {
+				type: Boolean,
+				default: false
+			},
+			L: {
+				type: Boolean,
+				default: false
+			},
+			M: {
+				type: Boolean,
+				default: false
+			},
+			N: {
+				type: Boolean,
+				default: false
+			},
+			O: {
+				type: Boolean,
+				default: false
+			},
+			P: {
+				type: Boolean,
+				default: false
+			},
+			Q: {
+				type: Boolean,
+				default: false
+			},
+			R: {
+				type: Boolean,
+				default: false
+			},
+			S: {
+				type: Boolean,
+				default: false
+			}
         }
     },
     created: {
@@ -199,6 +552,7 @@ var AdmissionsSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'User'
     }
+
 });
 
-mongoose.model('Admissions', AdmissionsSchema);
+mongoose.model('Application', ApplicationSchema);
