@@ -6,30 +6,39 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
+var validator = function(property) {
+//	return (property.length != null);
+//	return ((this.provider !== 'local' && !this.updated) || property.length);
+	return property.length > 0;
+}
+
 var ApplicationSchema = new Schema({
-    personal_info: {
-        name: {
-            first: {
+	personal_info: {
+		name: {
+			first: {
 				type: String,
-				default: ''
+				default: '',
+				validate: [validator, 'Put your name in, yo']
 			},
-            middle: {
+			middle: {
 				type: String,
-				default: ''
+				default: '',
+				validate: [validator, 'Put your name in, yo']
 			},
-            last: {
+			last: {
 				type: String,
-				default: ''
+				default: '',
+				validate: [validator, 'Put your name in, yo']
 			},
-            suffix: {
+			suffix: {
 				type: String,
-				default: ''
+				default: '',
 			},
-            other_names: {
+			other_names: {
 				type: String,
-				default: ''
+				default: '',
 			}
-        },
+		},
 		has_ssn: {
 			type: Boolean,
 			default: false
