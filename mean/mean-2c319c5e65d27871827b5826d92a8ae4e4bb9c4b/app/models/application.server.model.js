@@ -701,6 +701,20 @@ var ApplicationSchema = new Schema({
 
 mongoose.model('Application', ApplicationSchema);
 
+//var Application = mongoose.model('Application', ApplicationSchema);
+/*
+function getApplication(givenFirst, givenLast, givenUFID){
+	Application.find({ first: givenFirst, last: givenLast, ufid: givenUFID }, callback);
+}
+*/
+/*
+function findApplication(givenFirst, givenLast, givenUFID){
+	Application.findOne({ first: givenFirst, last: givenLast, ufid: givenUFID }, function (err, adventure) {
+		if (err) return handleError(err);
+		console.log('%s %s is %s.', Application.first, Application.last, Application.ufid);
+	});
+}
+*/
 //COMPLETION PERCENT UPDATER
 //Only hits 94% at best because 6% reserved for transcript that
 //I can't get to compare properly, percents will all changes eventually anyway
