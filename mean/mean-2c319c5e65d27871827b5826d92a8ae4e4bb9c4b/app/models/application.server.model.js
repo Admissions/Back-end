@@ -6,54 +6,83 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
-var simpleStringValidator = function(property) {
-	return property.length > 0;
-};
-var nameValidate = [simpleStringValidator, 'Put your name in, yo'];
+var countryList = ['../../public/lib/angularjs-country-select/angular.country-select.js'.countries, ''];
+var stateList = ['', 'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'District Of Columbia', 'Florida',
+    			'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
+    			'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico',
+    			'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina',
+    			'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+
+var suffixEnum = ['', 'Jr.', 'Sr.', 'II', 'III', 'IV', 'V'];
+var monthsEnum = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var genderEnum = ['', 'Male', 'Female', 'Other'];
+var relationEnum = ['', 'Other', 'Mother', 'Father', 'Wife', 'Husband', 'Legal Guardian'];
+var termEnum = ['', 'Summer A/C (May) 2014', 'Summer B (June) 2014', 'Fall (August) 2014', 'Spring (January) 2015', 'Summer A/C (May) 2015', 'Summer B (June) 2015', 'Fall (August) 2015'];
+var goalEnum = ['', 'Master\'s', 'Specialist', 'PhD', 'Doctorate'];
+var scholarshipEnum = ['', 'Applied for funding', 'Funding approved'];
+var identifyEnum = ['', 'IIE', 'LASPAU', 'AMIDEAST', 'KOMMISSION'];
+
+var zipMatch = [/^[0-9]{5}(-?[0-9]{4})?$/, 'Zip code must be 5 digits'];
+var ssnMatch = [/^[0-9]{3}(-[0-9]{2}-|[0-9]{2})[0-9]{4}$/, 'SSN must be 3 digits - 2 digits - 4 digits, hyphens optional'];
+var nameMatch = [/^[A-z-'']*$/, 'Valid names may only contain letters A to Z (upper and lowercase, ASCII only), hyphens, and apostraphes.'];
+var ufidMatch = [/^[0-9]{4}-?[0-9]{4}$/, 'UFID must be 8 digits, middle hyphen optional'];
+var phoneMatch = [/^[0-9]{10}$/, 'Phone numbers must be 10 digits'];
+var emailMatch = [/.+\@.+\..+/, 'Invalid email address'];
+var streetMatch = [/^[A-z 0-9#]*$/, 'Street address may only contain alphanumeric characters, spaces, and (#)'];
 
 var ApplicationSchema = new Schema({
-	personal_info: {
-		name: {
-			first: {
+
+    first: {
+                type: String,
+                //default: '',
+                match: nameMatch
+            },
+
+    last: {
+                type: String,
+                //default: '',
+                match: nameMatch
+            },   
+
+    ufid: {
+            type: String,
+            match: ufidMatch
+        },             
+
+    completion_percent: {
+    		type: Number,
+    		default: 0
+    },
+
+    personal_info: {
+        name: {
+            
+            middle: {
 				type: String,
-				default: '',
-				validate: nameValidate
+				//default: '',
+				match: nameMatch
 			},
-			middle: {
+           
+            suffix: {
 				type: String,
-				default: '',
-				validate: nameValidate
+				//default: '',
+				enum: suffixEnum
 			},
-			last: {
+            other_names: {
 				type: String,
-				default: '',
-				validate: nameValidate
-			},
-			suffix: {
-				type: String,
-				default: '',
-			},
-			other_names: {
-				type: String,
-				default: '',
-			},
-		},
+				//default: '',
+				match: nameMatch
+			}
+        },
 		has_ssn: {
 			type: Boolean,
 			default: false
 		},
         ssn: {
-			type: Number
+			type: String,
+			match: ssnMatch
 		},
-        ufid: {
-			type: Number,
-			unique: true,//'For now, the name will uniquely id things',
-			required: true//'Required'
-		},
-		completion_percent: {
-			type: Number,
-			default: 0
-		},
+        
         previous_application: {
 			type: Boolean,
 			default: false
@@ -71,27 +100,33 @@ var ApplicationSchema = new Schema({
 			type: Boolean,
 			default: false
 		},
-        dob: Date,		//redundant with next section?
+        dob: Date,
 		bd: {
 			month: {
 				type: String,
-				default: ''
+				//default: '',
+				enum: monthsEnum
 			},
 			day: {
-				type: String,
-				default: ''
+				type: Number,
+				//default: 1,
+				min: 1,
+				max: 31
 			},
 			year: {
-				type: Number
+				type: Number,
+				min: 1920
 			},
 		},
         gender: {
 			type: String,
-			default: ''
+			//default: '',
+			enum: genderEnum
 		},
         nationality: {
 			type: String,
-			default: ''
+			//default: '',
+			enum: countryList
 		},
         ethnicity: {
             hispanic: {
@@ -121,35 +156,39 @@ var ApplicationSchema = new Schema({
         },
         email: {
 			type: String,
-			default: ''
+			//default: '',
+			match: emailMatch
 		},
         phone: {
             personal: {
                 number: {
-					type: Number
+					type: String,
+					match: phoneMatch
 				},
                 call: {
 					type: String,
-					default: ''
+					//default: ''
 				},
 			
             },
             work: {
                 number: {
-					type: Number,
+					type: String,
+					match: phoneMatch
 				},
                 call: {
 					type: String,
-					default: ''
+					//default: ''
 				},
             },
             cell: {
                 number: {
-					type: Number
+					type: String,
+					match: phoneMatch
 				},
                 call: {
 					type: String,
-					default: ''
+					//default: ''
 				},
             }
         },
@@ -157,61 +196,69 @@ var ApplicationSchema = new Schema({
             permanent: {
 				street: {
 					type: String,
-					default: ''
+					//default: '',
+					match: streetMatch
 				},
 				city: {
 					type: String,
-					default: ''
+					//default: ''
 				},
 				state: {
 					type: String,
-					default: ''
+					//default: '',
+					enum: stateList
 				},
 				country: {
 					type: String,
-					default: ''
+					//default: '',
+					enum: countryList
+				},
+				zip: {
+					type: String,
+					//default: '',
+					match: zipMatch
 				}
 			},
             current: {
-				street: String,
+				street: {type: String, match: streetMatch},
 				city: String,
-				state: String,
-				country: String,
-				zip: String
+				state: {type: String, enum: stateList},
+				country: {type: String, enum: countryList},
+				zip: {type: String, match: zipMatch}
 			},
             valid_until: Date
         },
         emergency_contact: {
             name: {
-                first: String,
-                middle: String,
-                last: String,
-                suffix: String,
-                other_names: String,
-                relationship: String
+                first: {type: String, match: nameMatch},
+                middle: {type: String, match: nameMatch},
+                last: {type: String, match: nameMatch},
+                suffix: {type: String, enum: suffixEnum},
+                other_names: {type: String, match: nameMatch},
+                relationship: {type: String, enum: relationEnum}
             },
             address: {
-				street: String,
+				street: {type: String, match: streetMatch},
 				city: String,
-				state: String,
-				country: String,
-				zip: String
+				state: {type: String, enum: stateList},
+				country: {type: String, enum: countryList},
+				zip: {type: String, match: zipMatch}
             },
             phone: {
                 personal: {
-                    number: Number,
+                    number: {type: String, match: phoneMatch},
                     us: String,
                     intl: String
 					},
 					
                 work: {
-                    number: Number,
+                    number: {type: String, match: phoneMatch},
                     us: String,
                     intl: String
 					},
 
                 cell: {
-                    number: Number,
+                    number: {type: String, match: phoneMatch},
                     us: String,
                     intl: String
                 }
@@ -232,40 +279,48 @@ var ApplicationSchema = new Schema({
         special_programs_application: {
             famu_feeder: {
 				type: String,
-				default: ''
+				//default: '',
+				enum: scholarshipEnum
 			},
             fullbright_scholar: {
 				type: String,
-				default: ''
+				//default: '',
+				enum: scholarshipEnum
 			},
 			please_identify_program: {
 				type: String,
-				default: ''
+				//default: '',
+				enum: identifyEnum
 			},
             mcnair_scholar: {
 				type: String,
-				default: ''
+				//default: '',
+				enum: scholarshipEnum
 			},
             mcknight_scholar: {
 				type: String,
-				default: ''
+				//default: '',
+				enum: scholarshipEnum
 			},
             national_science_foundation_fellowship: {
 				type: String,
-				default: ''
+				//default: '',
+				enum: scholarshipEnum
 			},
             national_institutes_of_health_fellowship: {
 				type: String,
-				default: ''
+				//default: '',
+				enum: scholarshipEnum
 			},
             other: {
 				scholarship: {
 					type: String,
-					default: ''
+					//default: '',
+					enum: scholarshipEnum
 				},
 				explain: {
 					type: String,
-					default: ''
+					//default: ''
 				}
 			},
             check_following: {
@@ -298,8 +353,8 @@ var ApplicationSchema = new Schema({
     },
     degree_programs: {
         primary_program: {
-            intended_year_and_term: String,
-            degree_goal: String,
+            intended_year_and_term: {type: String, enum: termEnum},
+            degree_goal: {type: String, enum: goalEnum},
             program_of_study: String,
             program_specialization: String,
             department_contact: String
@@ -310,11 +365,11 @@ var ApplicationSchema = new Schema({
         undergraduate: {
             major: {
 				type: String,
-				default: ''
+				//default: ''
 			},
             specialization: {
 				type: String,
-				default: ''
+				//default: ''
 			}
         },
         self_reported_gpa: {
@@ -322,7 +377,9 @@ var ApplicationSchema = new Schema({
         	GPA: {
 
         		type: Number,
-        		default: 0
+        		default: 0,
+        		min: 0,
+        		max: 4
         	},
 			A: {
 				type: Number,
@@ -459,15 +516,15 @@ var ApplicationSchema = new Schema({
         activities: {
             activity: {
 				type: String,
-				default: ''
+				//default: ''
 			},
             city: String,
-            country: String,
-            state: String,
-            from: String,
-            day1: String,
-            to: String,
-            day2: String
+            state: {type: String, enum: stateList},
+            country: {type: String, enum: countryList},
+            from: {type: String, enum: monthsEnum},
+            day1: {type: Number, min: 1, max: 31},
+            to: {type: String, enum: monthsEnum},
+            day2: {type: Number, min: 1, max: 31}
         },
         resume: {
             name: String,
@@ -565,265 +622,60 @@ var ApplicationSchema = new Schema({
     user: {
         type: Schema.ObjectId,
         ref: 'User'
-    },
-    //Planning on using the $set operator with db.collection.update() command for these -Josh
-    completion: {
-    	filled: {				//No Booleans will have an associated filled Boolean
-    		f_name: Boolean,	//Some info-sets have an _ALL to simplify/speed some checks
-    		m_name: Boolean,	//Some boolean-sets have an _ANY for optional-but-suggested sections
-    		l_name: Boolean,
-    		suffix: Boolean,
-    		o_name: Boolean,
-    		ssn: Boolean,
-    		ufid: Boolean,
-    		b_month: Boolean,
-    		b_day: Boolean,
-    		b_year: Boolean,
-    		b_day_ALL: Boolean,
-    		gender: Boolean,
-    		nationality: Boolean,
-    		email_addr: Boolean,
-    		pers_phone: Boolean,
-    		work_phone: Boolean,
-    		cell_phone: Boolean,
-    		phone_ANY: Boolean,
-    		perm_addr_str: Boolean,
-    		perm_addr_cit: Boolean,
-    		perm_addr_sta: Boolean,
-    		perm_addr_cnt: Boolean,
-    		perm_addr_zip: Boolean,
-    		perm_addr_ALL: Boolean,
-    		curr_addr_str: Boolean,
-    		curr_addr_cit: Boolean,
-    		curr_addr_sta: Boolean,
-    		curr_addr_cnt: Boolean,
-    		curr_addr_zip: Boolean,
-    		curr_addr_val: Boolean,
-    		curr_addr_ALL: Boolean,
-    		e_f_name: Boolean,
-    		e_m_name: Boolean,
-    		e_l_name: Boolean,
-    		e_suffix: Boolean,
-    		e_o_name: Boolean,
-    		e_relate: Boolean,
-    		e_addr_str: Boolean,
-    		e_addr_cit: Boolean,
-    		e_addr_sta: Boolean,
-    		e_addr_cnt: Boolean,
-    		e_addr_zip: Boolean,
-    		e_addr_ALL: Boolean,
-    		e_phone_pers: Boolean,
-    		e_phone_work: Boolean,
-    		e_phone_cell: Boolean,
-    		e_phone_ANY: Boolean,
-    		e_contact_ALL: Boolean,
-    		scholar_famu: Boolean,
-    		scholar_fullbright: Boolean,
-    		scholar_identify: Boolean,
-    		scholar_mcnair: Boolean,
-    		scholar_mcknight: Boolean,
-    		scholar_natl_sci: Boolean,
-    		scholar_natl_hlth: Boolean,
-    		scholar_other_schol: Boolean,
-    		scholar_other_expln: Boolean,
-    		scholar_ANY: Boolean,
-    		supporting_doc: Boolean,
-    		degree_prog_term: Boolean,
-    		degree_prog_goal: Boolean,
-    		degree_prog_study: Boolean,
-    		degree_prog_special: Boolean,
-    		degree_prog_contact: Boolean,
-    		degree_prog_purpose: Boolean,
-    		degree_prog_ALL: Boolean,
-    		ugrad_major: Boolean,
-    		ugrad_special: Boolean,
-    		gpa_calculated: Boolean,
-    		test_gre_date: Boolean,
-    		test_gre_verb: Boolean,
-    		test_gre_qunt: Boolean,
-    		test_gre_anal: Boolean,
-    		test_gre_totl: Boolean,
-    		test_gre_ALL: Boolean,
-    		test_gmat_date: Boolean,
-    		test_gmat_verb: Boolean,
-    		test_gmat_qunt: Boolean,
-    		test_gmat_anal: Boolean,
-    		test_gmat_reas: Boolean,
-    		test_gmat_totl: Boolean,
-    		test_gmat_ALL: Boolean,
-    		test_mat_date: Boolean,
-    		test_mat_scor: Boolean,
-    		test_mat_ALL: Boolean,
-    		test_fe_date: Boolean,
-    		test_fe_scor: Boolean,
-    		test_fe_ALL: Boolean,
-    		test_toefl_pdate: Boolean,
-    		test_toefl_list: Boolean,
-    		test_toefl_writ: Boolean,
-    		test_toefl_read: Boolean,
-    		test_toefl_totl: Boolean,
-    		test_toefl_idate: Boolean,
-    		test_toefl_iread: Boolean,
-    		test_toefl_ilist: Boolean,
-    		test_toefl_ispek: Boolean,
-    		test_toefl_iwrit: Boolean,
-    		test_toefl_itotl: Boolean,
-    		test_toefl_ALL: Boolean,
-    		test_ielts_date: Boolean,
-    		test_ielts_list: Boolean,
-    		test_ielts_writ: Boolean,
-    		test_ielts_read: Boolean,
-    		test_ielts_spek: Boolean,
-    		test_ielts_totl: Boolean,
-    		test_ielts_ALL: Boolean,
-    		test_melab_date: Boolean,
-    		test_melab_comp: Boolean,
-    		test_melab_list: Boolean,
-    		test_melab_gcvr: Boolean,
-    		test_melab_totl: Boolean,
-    		test_melab_ALL: Boolean,
-    		active_type: Boolean,
-    		active_city: Boolean,
-    		active_stat: Boolean,
-    		active_ctry: Boolean,
-    		active_from: Boolean,
-    		active_day1: Boolean,
-    		active_to: Boolean,
-    		active_day2: Boolean,
-    		active_ALL: Boolean,
-    		sub_resume: Boolean,
-    		sub_trnscr: Boolean,
-    		resident_aff_ANY: Boolean
-    	},
-    	complete: {		//for percentage completion, favor _ALL over individuals
-    		f_name: Boolean,		//anything with CHECK is used in percentage completion
-    		m_name: Boolean,		//some bools exist only in filled{} like residency, as it is always "complete"
-    		l_name: Boolean,
-    		suffix: Boolean,
-    		o_name: Boolean,
-    		name_req: Boolean,				//CHECK
-    		ssn: Boolean,
-    		ufid: Boolean,					//OPTIONAL CHECK
-    		b_month: Boolean,
-    		b_day: Boolean,
-    		b_year: Boolean,
-    		b_day_ALL: Boolean,				//CHECK
-    		gender: Boolean,				//CHECK
-    		nationality: Boolean,			//CHECK
-    		email_addr: Boolean,			//CHECK
-    		pers_phone: Boolean,
-    		work_phone: Boolean,
-    		cell_phone: Boolean,
-    		phone_ANY: Boolean,				//CHECK
-    		perm_addr_str: Boolean,
-    		perm_addr_cit: Boolean,
-    		perm_addr_sta: Boolean,
-    		perm_addr_cnt: Boolean,
-    		perm_addr_zip: Boolean,
-    		perm_addr_ALL: Boolean,			//CHECK
-    		curr_addr_str: Boolean,
-    		curr_addr_cit: Boolean,
-    		curr_addr_sta: Boolean,
-    		curr_addr_cnt: Boolean,
-    		curr_addr_zip: Boolean,
-    		curr_addr_val: Boolean,
-    		curr_addr_ALL: Boolean,			//CHECK
-    		e_f_name: Boolean,
-    		e_m_name: Boolean,
-    		e_l_name: Boolean,
-    		e_suffix: Boolean,
-    		e_o_name: Boolean,
-    		e_relate: Boolean,
-    		e_name_req: Boolean,			//CHECK
-    		e_addr_str: Boolean,
-    		e_addr_cit: Boolean,
-    		e_addr_sta: Boolean,
-    		e_addr_cnt: Boolean,
-    		e_addr_zip: Boolean,
-    		e_addr_ALL: Boolean,			//CHECK
-    		e_phone_pers: Boolean,
-    		e_phone_work: Boolean,
-    		e_phone_cell: Boolean,
-    		e_phone_ANY: Boolean,			//CHECK
-    		e_contact_ALL: Boolean,
-    		scholar_famu: Boolean,
-    		scholar_fullbright: Boolean,
-    		scholar_identify: Boolean,
-    		scholar_mcnair: Boolean,
-    		scholar_mcknight: Boolean,
-    		scholar_natl_sci: Boolean,
-    		scholar_natl_hlth: Boolean,
-    		scholar_other_schol: Boolean,
-    		scholar_other_expln: Boolean,
-    		scholar_ANY: Boolean,			//OPTIONAL CHECK
-    		supporting_doc: Boolean,
-    		degree_prog_term: Boolean,
-    		degree_prog_goal: Boolean,
-    		degree_prog_study: Boolean,
-    		degree_prog_special: Boolean,
-    		degree_prog_contact: Boolean,
-    		degree_prog_purpose: Boolean,
-    		degree_prog_ALL: Boolean,		//CHECK
-    		ugrad_major: Boolean,			//CHECK
-    		ugrad_special: Boolean,
-    		gpa_calculated: Boolean,		//CHECK
-    		test_gre_date: Boolean,
-    		test_gre_verb: Boolean,
-    		test_gre_qunt: Boolean,
-    		test_gre_anal: Boolean,
-    		test_gre_totl: Boolean,
-    		test_gre_ALL: Boolean,			//OPTIONAL CHECK
-    		test_gmat_date: Boolean,
-    		test_gmat_verb: Boolean,
-    		test_gmat_qunt: Boolean,
-    		test_gmat_anal: Boolean,
-    		test_gmat_reas: Boolean,
-    		test_gmat_totl: Boolean,
-    		test_gmat_ALL: Boolean,			//OPTIONAL CHECK
-    		test_mat_date: Boolean,
-    		test_mat_scor: Boolean,
-    		test_mat_ALL: Boolean,			//OPTIONAL CHECK
-    		test_fe_date: Boolean,
-    		test_fe_scor: Boolean,
-    		test_fe_ALL: Boolean,			//OPTIONAL CHECK
-    		test_toefl_pdate: Boolean,
-    		test_toefl_list: Boolean,
-    		test_toefl_writ: Boolean,
-    		test_toefl_read: Boolean,
-    		test_toefl_totl: Boolean,
-    		test_toefl_idate: Boolean,
-    		test_toefl_iread: Boolean,
-    		test_toefl_ilist: Boolean,
-    		test_toefl_ispek: Boolean,
-    		test_toefl_iwrit: Boolean,
-    		test_toefl_itotl: Boolean,
-    		test_toefl_ALL: Boolean,		//OPTIONAL CHECK
-    		test_ielts_date: Boolean,
-    		test_ielts_list: Boolean,
-    		test_ielts_writ: Boolean,
-    		test_ielts_read: Boolean,
-    		test_ielts_spek: Boolean,
-    		test_ielts_totl: Boolean,
-    		test_ielts_ALL: Boolean,		//OPTIONAL CHECK
-    		test_melab_date: Boolean,
-    		test_melab_comp: Boolean,
-    		test_melab_list: Boolean,
-    		test_melab_gcvr: Boolean,
-    		test_melab_totl: Boolean,
-    		test_melab_ALL: Boolean,		//OPTIONAL CHECK
-    		active_type: Boolean,
-    		active_city: Boolean,
-    		active_stat: Boolean,
-    		active_ctry: Boolean,
-    		active_from: Boolean,
-    		active_day1: Boolean,
-    		active_to: Boolean,
-    		active_day2: Boolean,
-    		active_ALL: Boolean,			//OPTIONAL CHECK
-    		sub_resume: Boolean,			//CHECK
-    		sub_trnscr: Boolean,			//CHECK
-    	}
     }
+
 });
 
 mongoose.model('Application', ApplicationSchema);
+
+
+//COMPLETION PERCENT UPDATER
+//Only hits 94% at best because 6% reserved for transcript that
+//I can't get to compare properly, percents will all changes eventually anyway
+//Not even sure if I required enough/proper things, will also change eventually
+ApplicationSchema.pre('save', function(next) {
+	var p_i = this.personal_info;
+	var eth = p_i.ethnicity;
+	var e_name = p_i.emergency_contact.name;
+	var perm = p_i.address.permanent;
+	var curr = p_i.address.current;
+	var e_addr = p_i.emergency_contact.address;
+	var t_gre = this.education_and_activities.test_scores.gre;
+	var t_gmat = this.education_and_activities.test_scores.gmat;
+	var t_mat = this.education_and_activities.test_scores.mat;
+	var t_fe = this.education_and_activities.test_scores.fe;
+	var t_toefl = this.education_and_activities.test_scores.toefl;
+	var t_ielts = this.education_and_activities.test_scores.ielts;
+	var t_melab = this.education_and_activities.test_scores.melab;
+	this.completion_percent = 	(((p_i.has_ssn ||p_i.ssn!== undefined) ?  4:0) +		//has_ssn = true ==> person clicked box that they DON'T HAVE SSN
+								(this.first 			!== undefined ?  4:0) +			//			WHAT THE HELL GUYS
+								(this.last 				!== undefined ?  4:0) +
+								(this.ufid 				!== undefined ?  4:0) +
+								(p_i.bd.month 			!== undefined ?  4:0) +
+								(p_i.bd.day 			!== undefined ?  4:0) +
+								(p_i.bd.year 			!== undefined ?  4:0) +
+								(p_i.gender 			!== undefined ?  4:0) +
+								(p_i.nationality 		!== undefined ?  4:0) +
+								(p_i.email 				!== undefined ?  4:0) +
+								(e_name.first 			!== undefined ?  4:0) +
+								(e_name.last			!== undefined ?  4:0) +
+								(e_name.relationship	!== undefined ?  4:0) +
+								//(this.education_and_activities.transcript 		!== null ?  6:0) +		//can't get this comparison to work quite yet
+								(this.education_and_activities.u_grad_major 			!== undefined ?  6:0) +
+								(this.education_and_activities.recommendation	!== undefined ?  4:0) +		//does this variable even exist? -> as "supporting documentation"
+								((eth.asian || eth.black || eth.pacific_islander || eth.american_indian || eth.hispanic || eth.white)	?  4:0) +
+								((p_i.phone.personal.number !== undefined || p_i.phone.work.number !== undefined || p_i.phone.cell.number !== undefined) ?  4:0) +
+								((curr.street !== undefined && curr.city !== undefined && curr.country !== undefined && curr.zip !== undefined) ?  4:0) +  //zip for one of these doesn't even have an input section
+								((perm.street !== undefined && perm.city !== undefined && perm.country !== undefined && perm.zip !== undefined) ?  4:0) +	//also not requiring .state because other countries and whatnot (maybe add a None to state dropdown?)
+								((e_addr.street !== undefined && e_addr.city !== undefined && e_addr.country !== undefined && e_addr.zip !== undefined) ?  4:0) +
+								((p_i.emergency_contact.phone.personal.number !== undefined || p_i.emergency_contact.phone.work.number !== undefined || p_i.emergency_contact.phone.cell.number !== undefined) ?  4:0) +
+								(((t_gre.taken && t_gre.date !== undefined && t_gre.verbal !== undefined && t_gre.quantative !== undefined && t_gre.analytical_writing !== undefined && t_gre.total !== undefined) ||
+								  (t_gmat.taken && t_gmat.date !== undefined && t_gmat.verbal !== undefined && t_gmat.quantative !== undefined && t_gmat.analytical_writing !== undefined && t_gmat.integrated_reasoning !== undefined && t_gmat.total !== undefined) ||
+								  (t_mat.taken && t_mat.date !== undefined && t_mat.score !== undefined) ||
+								  (t_fe.taken && t_fe.date !== undefined && t_fe.score !== undefined) ||
+								  (t_toefl.taken && t_toefl.paper_date !== undefined && t_toefl.listening !== undefined && t_toefl.writing !== undefined && t_toefl.reading !== undefined && t_toefl.total !== undefined && t_toefl.internet_date !== undefined && t_toefl.readingi !== undefined && t_toefl.listeningi !== undefined && t_toefl.speakingi !== undefined && t_toefl.writingi !== undefined && t_toefl.totali !== undefined) ||
+								  (t_ielts.taken && t_ielts.date !== undefined && t_ielts.listening !== undefined && t_ielts.writing !== undefined && t_ielts.reading !== undefined && t_ielts.speaking !== undefined && t_ielts.total !== undefined) ||
+								  (t_melab.taken && t_melab.date !== undefined && t_melab.composition !== undefined && t_melab.listening !== undefined && t_melab.gcvr !== undefined && t_melab.total)) ?  8:0) +
+								(this.education_and_activities.self_reported_gpa.GPA !== 0 ? 4:0));
+	next();
+});
