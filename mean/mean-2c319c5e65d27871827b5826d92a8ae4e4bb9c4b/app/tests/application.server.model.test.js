@@ -14,19 +14,35 @@ var app, app2;
 /**
  * Unit tests
  */
+var defaultApp = {
+    first: 'Tim',
+    last: 'Toe',
+    ufid: '12345678',
+    personal_info: {
+        name: {
+            middle: 'Fil'
+        },
+        ssn: "123-45-6789",
+        address: {
+            permanent: {
+                zip: "12345"
+            }
+        },
+        phone: {
+            personal: {
+                number: '1234567890'
+            }
+        }
+    }
+};
 describe('Application Model Unit Tests:', function() {
-    before(function(done) {
-        app = new Application({
-            first: 'Tim',
-            last: 'Toe',
-            ufid: '12345678'
-        });
-        app2 = new Application({
-            first: 'Tim',
-            last: 'Toe',
-            ufid: '12345678'
-        });
-
+    beforeEach(function(done) {
+        app = new Application(defaultApp);
+        app2 = new Application(defaultApp);
+        done();
+    });
+    afterEach(function(done) {
+        Application.remove().exec();
         done();
     });
     describe('Method Save', function() {
@@ -41,10 +57,10 @@ describe('Application Model Unit Tests:', function() {
             app.save(done);
         });
 
-        //		it('should be able to remove without problems', function(done) {
-        //			app.save();
-        //			app.remove(done);
-        //		});
+        it('should be able to remove without problems', function(done) {
+            app.save();
+            app.remove(done);
+        });
 
         //		NOT WORKING YET
         //		it('should fail to save an existing application again', function(done) {
@@ -55,7 +71,9 @@ describe('Application Model Unit Tests:', function() {
         //			});
         //		});
 
-        it('should be able to show an error when try to save empty name', function(done) {
+    });
+    describe('Name Match', function() {
+        it('should not be able to save an empty name', function(done) {
             app.first = '';
             return app.save(function(err) {
                 should.exist(err);
@@ -72,7 +90,7 @@ describe('Application Model Unit Tests:', function() {
         ];
         for (var i = 0; i < badNameChar.length; i++) {
             (function(str) {
-                it('should not be able to save first names with "' + str + '" in them', function(done) {
+                it('should not be able to save names with "' + str + '" in them', function(done) {
                     app.first = str
                     return app.save(function(err) {
                         should.exist(err);
@@ -81,18 +99,76 @@ describe('Application Model Unit Tests:', function() {
                 });
             })(badNameChar[i]);
         }
-        for (var i = 0; i < badNameChar.length; i++) {
-            (function(str) {
-                it('should not be able to save last names with "' + str + '" in them', function(done) {
-                    app.last = str
+    });
+    describe('Phone Number Match', function() {
+        it('should not be able to save empty phone numbers', function(done) {
+            app.personal_info.phone.personal.number = '';
+            return app.save(function(err) {
+                should.exist(err);
+                done();
+            });
+        });
+        it('should be able to save phone numbers', function(done) {
+            app.personal_info.phone.personal.number = '1231231234';
+            app.save(done);
+        });
+        it('should be able to save phone numbers with hypens', function(done) {
+            app.personal_info.phone.personal.number = '123-123-1234';
+            app.save(done);
+        });
+        var str = '';
+        for (var i = 1; i < 10; i++) {
+            str += i;
+            (function(number) {
+                it('should not be able to save phone number with less than 10 digits: ' + number , function(done) {
+                    app.personal_info.phone.personal.number = number;
                     return app.save(function(err) {
                         should.exist(err);
                         done();
                     });
                 });
-            })(badNameChar[i]);
+            })(str);
         }
-        // No hyphens
+        // incorrect groups of digits
+        for (var i = 0; i < 4; i++) {
+            var str = '';
+            for (var j = 0; j < 3; j++) {
+                for (var k = 0; k < i; k++) {
+                    str += k;
+                }
+                if (j < 2) {
+                    str += '-';
+                }
+            }
+            (function(number) {
+                it('should not be able to save phone number: ' + str, function(done) {
+                    app.personal_info.phone.personal.number = number;
+                    return app.save(function(err) {
+                        should.exist(err);
+                        done();
+                    });
+                });
+            })(str);
+        }
+    });
+    describe('UFID Match', function() {
+        it('should not be able to save empty UFID', function(done) {
+            app.ufid = '';
+            return app.save(function(err) {
+                should.exist(err);
+                done();
+            });
+        });
+        it('should be able to save a UFID with hyphen', function(done) {
+            app.ufid = '1234-1234';
+            app.save(done);
+        });
+        it('should be able to save a UFID without hyphen', function(done) {
+            //app.personal_info.phone.personal.number = '1234567890';
+            //app.first = 'hi';
+            app.ufid = '12341234';
+            app.save(done);
+        });
         var str = '';
         for (var i = 1; i < 8; i++) {
             str += i;
@@ -133,10 +209,5 @@ describe('Application Model Unit Tests:', function() {
                 });
             })(str);
         }
-    });
-
-    after(function(done) {
-        Application.remove().exec();
-        done();
     });
 });
