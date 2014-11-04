@@ -25,9 +25,9 @@ var identifyEnum = ['', 'IIE', 'LASPAU', 'AMIDEAST', 'KOMMISSION'];
 
 var zipMatch = [/^[0-9]{5}(-?[0-9]{4})?$/, 'Zip code must be 5 digits'];
 var ssnMatch = [/^[0-9]{3}(-[0-9]{2}-|[0-9]{2})[0-9]{4}$/, 'SSN must be 3 digits - 2 digits - 4 digits, hyphens optional'];
-var nameMatch = [/^[A-Za-z\'\-]*$/, 'Valid names may only contain letters A to Z (upper and lowercase, ASCII only), hyphens, and apostraphes.'];
+var nameMatch = [/^[A-Za-z\''\-]+$/, 'Valid names may only contain letters A to Z (upper and lowercase, ASCII only), hyphens, and apostraphes.'];
 var ufidMatch = [/^[0-9]{4}-?[0-9]{4}$/, 'UFID must be 8 digits, middle hyphen optional'];
-var phoneMatch = [/^[0-9]{10}$/, 'Phone numbers must be 10 digits'];
+var phoneMatch = [/^[0-9]{3}-?[0-9]{3}-?[0-9]{4}$/, 'Phone numbers must be 10 digits, hyphens optional'];
 var emailMatch = [/.+\@.+\..+/, 'Invalid email address'];
 var streetMatch = [/^[A-z 0-9#]*$/, 'Street address may only contain alphanumeric characters, spaces, and (#)'];
 
