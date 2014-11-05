@@ -130,7 +130,7 @@ describe('Application Model Unit Tests:', function() {
             })(str);
         }
         // incorrect groups of digits
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 6; i++) {
             var str = '';
             for (var j = 0; j < 3; j++) {
                 for (var k = 0; k < i; k++) {
@@ -150,6 +150,32 @@ describe('Application Model Unit Tests:', function() {
                 });
             })(str);
         }
+    });
+    describe('Zip Code Match', function() {
+        it('should be able to save a zip code', function(done) {
+            app.personal_info.address.permanent.zip = '12345';
+            app.save(done);
+        });
+        var str = '';
+        for (var i = 1; i < 5; i++) {
+            str += i;
+            (function(zip) {
+                it('should not be able to save a zip code with less than 5 digits: ' + zip , function(done) {
+                    app.personal_info.address.permanent.zip = zip;
+                    return app.save(function(err) {
+                        should.exist(err);
+                        done();
+                    });
+                });
+            })(str);
+        }
+        it('should not be able to save a zip code with less more than 5 digits', function(done) {
+            app.personal_info.address.permanent.zip = '1234567';
+            return app.save(function(err) {
+                should.exist(err);
+                done();
+            });
+        });
     });
     describe('UFID Match', function() {
         /*it('should not be able to save empty UFID', function(done) {
