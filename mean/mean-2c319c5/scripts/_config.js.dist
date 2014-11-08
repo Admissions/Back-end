@@ -1,0 +1,9 @@
+module.exports = {
+   'mongolab': {
+      'host': 'ds053130.mongolab.com',
+      'username': 'root',
+      'password': 'PASSWORD GOES HERE',
+      'port': '53130',
+      'database': 'shared_data'
+   }
+};
