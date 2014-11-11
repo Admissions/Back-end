@@ -19,6 +19,7 @@ var _common = require('./_common.js');
 var mongoose = require('mongoose');
 require('../app/models/application.server.model.js');
 var Application = mongoose.model('Application');
+var gradMajors = require('../../../common/majors.js').graduate_majors;
 
 
 var flat = require('flat');
@@ -77,9 +78,17 @@ function generateApplication() {
    var first = chance.first({gender: gender});
    var middle = chance.pick(['', chance.first({gender: gender})]);
    var last = chance.last();
-   var majors = [
 
-   ];
+   var degree_goal = chance.pick(['', 'D', 'M', 'H', 'S']);
+
+   var major;
+   if (degree_goal === '') {
+      major = '';
+   }
+   else {
+      major = chance.pick(gradMajors[degree_goal]);
+   }
+   
 
    var suffixes = [''];
    if (gender.toLowerCase() === 'Male') {
@@ -141,7 +150,8 @@ function generateApplication() {
       degree_programs: {
          primary_program: {
             intended_year_and_term: '',
-            degree_goal: ''
+            degree_goal: degree_goal,
+            major: major // TODO needs representing in the model
          }
       },
       education_and_activities: {
