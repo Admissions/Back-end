@@ -1,6 +1,25 @@
+var rl = require('readline-sync');
+
+var wipe;
+do {
+   wipe = rl.question("Wipe the 'applications' collection before inserting? (y/N) ").toLowerCase();
+   if (wipe === "") {
+      wipe = 'n';
+   }
+} while (wipe !== 'y' && wipe !== 'n');
+
+var APPLICATIONS_TO_GENERATE;
+do {
+   APPLICATIONS_TO_GENERATE = rl.question("How many applications to generate? (Default: 50) ");
+} while (!APPLICATIONS_TO_GENERATE.match(/\d+/));
+APPLICATIONS_TO_GENERATE = Number(APPLICATIONS_TO_GENERATE);
+
+
 var _common = require('./_common.js');
 var mongoose = require('mongoose');
-var application = require('../app/models/application.server.model.js');
+require('../app/models/application.server.model.js');
+var Application = mongoose.model('Application');
+
 
 var flat = require('flat');
 var chance = new require('chance').Chance();
@@ -8,17 +27,59 @@ var chance = new require('chance').Chance();
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
-   populateDB();
+   if (wipe === 'y') {
+      Application.find().remove(function(err) {
+         if (err) {
+            throw "Could not wipe collection.";
+         }
+         else {
+            console.log("Wiped collection.");
+            main();
+         }
+      });
+   }
+
+   function main() {
+      var i;
+      var coll = db.collection('applications');
+      var app;
+      var counter = 0;
+
+      function genApp() {
+         app = generateApplication();
+         Application.create(app, function(err, application) {
+            counter++;
+            if (counter > APPLICATIONS_TO_GENERATE) {
+               mongoose.disconnect();
+               return;
+            }
+            if (err) {
+               console.error("Could not insert application. Error: " + err);
+            }
+            else {
+               console.log("Inserted application number " + counter + " of " + APPLICATIONS_TO_GENERATE
+               + " (" + application.first + ' ' + application.last + ')' );
+            }
+            genApp();
+         });
+      }
+
+      genApp();
+   }
+
 });
 
 mongoose.connect(_common.getConnURL());
 
-function populateDB() {
+function generateApplication() {
    
    var gender = chance.gender();
    var first = chance.first({gender: gender});
    var middle = chance.pick(['', chance.first({gender: gender})]);
    var last = chance.last();
+   var majors = [
+
+   ];
 
    var suffixes = [''];
    if (gender.toLowerCase() === 'Male') {
@@ -98,6 +159,6 @@ function populateDB() {
          }
       }
    };
-   console.log(schema);
+   return schema;
 
 }
