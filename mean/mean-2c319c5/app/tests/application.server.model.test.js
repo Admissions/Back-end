@@ -5,7 +5,6 @@
 var should = require('should'),
     mongoose = require('mongoose'),
     Application = mongoose.model('Application');
-    
 
 /**
  * Globals
@@ -52,8 +51,6 @@ describe('Application Model Unit Tests:', function() {
                 applications.should.have.length(0);
                 done();
             });
-        });
-
         it('should be able to save without problems', function(done) {
             app.save(done);
         });
@@ -117,6 +114,8 @@ describe('Application Model Unit Tests:', function() {
             app.personal_info.phone.personal.number = '123-123-1234';
             app.save(done);
         });
+
+        });
         var str = '';
         for (var i = 1; i < 10; i++) {
             str += i;
@@ -170,7 +169,7 @@ describe('Application Model Unit Tests:', function() {
                 });
             })(str);
         }
-        it('should not be able to save a zip code with less more than 5 digits', function(done) {
+        it('should not be able to save a zip code with more than 5 digits', function(done) {
             app.personal_info.address.permanent.zip = '1234567';
             return app.save(function(err) {
                 should.exist(err);
