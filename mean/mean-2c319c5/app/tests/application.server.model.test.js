@@ -236,31 +236,37 @@ describe('Application Model Unit Tests:', function() {
             })(str);
         }
     });
-/*
     describe('SSN Match', function() {
-        it('should not be able to save empty SSN', function(done) {
-            app.ufid = '';
+        /*it('should not be able to save empty SSN', function(done) {
+            app.ssn = '';
+            return app.save(function(err) {
+                should.exist(err);
+                done();
+            });
+        });*/
+        it('should be able to save a SSN with hyphen', function(done) {
+            app.personal_info.ssn = '123-45-1234';
+            app.save(done);
+        });
+        it('should be able to save a SSN without hyphen', function(done) {
+            //app.personal_info.phone.personal.number = '1234567890';
+            //app.first = 'hi';
+            app.personal_info.ssn = '123456789';
+            app.save(done);
+        });
+        it('should not be able to save "---" as an SSN', function(done) {
+            app.personal_info.ssn = '---';
             return app.save(function(err) {
                 should.exist(err);
                 done();
             });
         });
-        it('should be able to save a UFID with hyphen', function(done) {
-            app.ufid = '1234-1234';
-            app.save(done);
-        });
-        it('should be able to save a UFID without hyphen', function(done) {
-            //app.personal_info.phone.personal.number = '1234567890';
-            //app.first = 'hi';
-            app.ufid = '12341234';
-            app.save(done);
-        });
         var str = '';
-        for (var i = 1; i < 8; i++) {
+        for (var i = 1; i < 9; i++) {
             str += i;
             (function(str) {
-                it('should not be able to save "' + str + '" as a UFID', function(done) {
-                    app.ufid = str;
+                it('should not be able to save "' + str + '" as a SSN', function(done) {
+                    app.personal_info.ssn = str;
                     return app.save(function(err) {
                         should.exist(err);
                         done();
@@ -268,12 +274,12 @@ describe('Application Model Unit Tests:', function() {
                 });
             })(str);
         }
-        str = "1234-";
-        for (var i = 1; i < 4; i++) {
+        str = "123-";
+        for (var i = 1; i < 2; i++) {
             str += i;
             (function(str) {
-                it('should not be able to save "' + str + '" as a UFID', function(done) {
-                    app.ufid = str;
+                it('should not be able to save "' + str + '" as a SSN', function(done) {
+                    app.personal_info.ssn = str;
                     return app.save(function(err) {
                         should.exist(err);
                         done();
@@ -281,13 +287,13 @@ describe('Application Model Unit Tests:', function() {
                 });
             })(str);
         }
-        str = "-1234";
+        str = "-12-";
         var s;
         for (var i = 1; i < 4; i++) {
             str = i + str;
             (function(str) {
-                it('should not be able to save "' + str + '" as a UFID', function(done) {
-                    app.ufid = str;
+                it('should not be able to save "' + str + '" as a SSN', function(done) {
+                    app.personal_info.ssn = str;
                     return app.save(function(err) {
                         should.exist(err);
                         done();
@@ -296,66 +302,4 @@ describe('Application Model Unit Tests:', function() {
             })(str);
         }
     });
-*/
-/*
-    describe('SSN Match', function() {
-        it('should not be able to save empty SSN', function(done) {
-            app.ufid = '';
-            return app.save(function(err) {
-                should.exist(err);
-                done();
-            });
-        });
-        it('should be able to save a UFID with hyphen', function(done) {
-            app.ufid = '1234-1234';
-            app.save(done);
-        });
-        it('should be able to save a UFID without hyphen', function(done) {
-            //app.personal_info.phone.personal.number = '1234567890';
-            //app.first = 'hi';
-            app.ufid = '12341234';
-            app.save(done);
-        });
-        var str = '';
-        for (var i = 1; i < 8; i++) {
-            str += i;
-            (function(str) {
-                it('should not be able to save "' + str + '" as a UFID', function(done) {
-                    app.ufid = str;
-                    return app.save(function(err) {
-                        should.exist(err);
-                        done();
-                    });
-                });
-            })(str);
-        }
-        str = "1234-";
-        for (var i = 1; i < 4; i++) {
-            str += i;
-            (function(str) {
-                it('should not be able to save "' + str + '" as a UFID', function(done) {
-                    app.ufid = str;
-                    return app.save(function(err) {
-                        should.exist(err);
-                        done();
-                    });
-                });
-            })(str);
-        }
-        str = "-1234";
-        var s;
-        for (var i = 1; i < 4; i++) {
-            str = i + str;
-            (function(str) {
-                it('should not be able to save "' + str + '" as a UFID', function(done) {
-                    app.ufid = str;
-                    return app.save(function(err) {
-                        should.exist(err);
-                        done();
-                    });
-                });
-            })(str);
-        }
-    });
-*/
 });

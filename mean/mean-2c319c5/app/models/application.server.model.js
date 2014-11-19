@@ -381,7 +381,7 @@ ApplicationSchema.pre('save', function(next) {
          ((dne(p_i.phone.personal.number) && dne(p_i.phone.work.number) && dne(p_i.phone.cell.number))              ? 0:4) +
          ((dne(curr.street) || dne(curr.city) || dne(curr.country) || dne(curr.zip) || (curr.country === 'United States' && dne(curr.zip))  ? 0:4) +
          ((dne(perm.street) || dne(perm.city) || dne(perm.country) || dne(perm.zip) || (perm.country === 'United States' && dne(perm.zip))  ? 0:4) 
-        );
+        )));
     p_i.application_started = (this.completion_percent > 0 ? true:false);
     p_i.application_complete = (this.completion_percent === 100 ? true:false);
     p_i.name.first = this.first;
