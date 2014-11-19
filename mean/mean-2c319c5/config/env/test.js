@@ -32,7 +32,7 @@ module.exports = {
 		callbackURL: 'http://localhost:3000/auth/github/callback'
 	},
 	mailer: {
-		from: process.env.MAILER_FROM || 'MAILER_FROM',
+		from: process.env.MAILER_FROM || 'University of Florida Admissions <ufgradadmissions@gmail.com>',
 		options: {
 			service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
 			auth: {
