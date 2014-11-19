@@ -5,6 +5,7 @@
 var should = require('should'),
     mongoose = require('mongoose'),
     Application = mongoose.model('Application');
+    
 
 /**
  * Globals
