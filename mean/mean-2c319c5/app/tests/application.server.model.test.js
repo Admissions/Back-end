@@ -51,6 +51,7 @@ describe('Application Model Unit Tests:', function() {
                 applications.should.have.length(0);
                 done();
             });
+        });
         it('should be able to save without problems', function(done) {
             app.save(done);
         });
@@ -60,14 +61,13 @@ describe('Application Model Unit Tests:', function() {
             app.remove(done);
         });
 
-        //		NOT WORKING YET
-        //		it('should fail to save an existing application again', function(done) {
-        //			app.save();
-        //			return app2.save(function(err) {
-        //				should.exist(err);
-        //				done();
-        //			});
-        //		});
+        it('should fail to save an existing application again', function(done) {
+        	app.save();
+        	return app2.save(function(err) {
+        		should.exist(err);
+        		done();
+        	});
+        });
 
     });
     describe('Name Match', function() {
@@ -115,7 +115,6 @@ describe('Application Model Unit Tests:', function() {
             app.save(done);
         });
 
-        });
         var str = '';
         for (var i = 1; i < 10; i++) {
             str += i;
@@ -301,5 +300,9 @@ describe('Application Model Unit Tests:', function() {
                 });
             })(str);
         }
+    });
+    describe('Email Match', function() {
+    });
+    describe('Street Match', function() {
     });
 });
