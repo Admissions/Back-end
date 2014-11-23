@@ -301,8 +301,143 @@ describe('Application Model Unit Tests:', function() {
             })(str);
         }
     });
+    /* This covers most email problems, but is not completely comprehensive.
+     * Doesn't test if comments work, or quoted strings */
     describe('Email Match', function() {
+        var str = 'foo@bar.baz';
+        (function (str) {
+            it('should be able to save an email: ' + str, function(done) {
+                app.personal_info.email = str;
+                app.save(done);
+            });
+        })(str);
+        str = 'foobar.baz';
+        (function (str) {
+            it('should not be able to save an email with no "@": ' + str, function(done) {
+                app.personal_info.email = str;
+                return app.save(function(err) {
+                    should.exist(err);
+                    done();
+                });
+            });
+        })(str);
+        str = 'foo@bar@baz.com';
+        (function (str) {
+            it('should not be able to save an email with multiple "@": ' + str, function(done) {
+                app.personal_info.email = str;
+                return app.save(function(err) {
+                    should.exist(err);
+                    done();
+                });
+            });
+        })(str);
+        str = 'foo..bar@baz.com';
+        (function (str) {
+            it('should not be able to save an email with double ".": ' + str, function(done) {
+                app.personal_info.email = str;
+                return app.save(function(err) {
+                    should.exist(err);
+                    done();
+                });
+            });
+        })(str);
+        str = 'foo.bar@baz..com';
+        (function (str) {
+            it('should not be able to save an email with double ".": ' + str, function(done) {
+                app.personal_info.email = str;
+                return app.save(function(err) {
+                    should.exist(err);
+                    done();
+                });
+            });
+        })(str);
+        str = 'foobar@baz';
+        (function (str) {
+            it('should not be able to save an email with incomplete domain: ' + str, function(done) {
+                app.personal_info.email = str;
+                return app.save(function(err) {
+                    should.exist(err);
+                    done();
+                });
+            });
+        })(str);
+        str = 'foo.bar@';
+        (function (str) {
+            it('should not be able to save an email without a domain: ' + str, function(done) {
+                app.personal_info.email = str;
+                return app.save(function(err) {
+                    should.exist(err);
+                    done();
+                });
+            });
+        })(str);
+        str = 'foo.bar@a23456789012345678901234567890123456789012345678901234567890.com';
+        (function (str) {
+            it('should not be able to save an email with domain longer than 63 characters: ' + str, function(done) {
+                app.personal_info.email = str;
+                return app.save(function(err) {
+                    should.exist(err);
+                    done();
+                });
+            });
+        })(str);
+        var badDomainChar = ['!', '@', '`', '#', '$',
+            '%', '^', '&', '*', '(', ')', '_', '=', '+', '~', '[', ']', '{', '}', '|', '\\',
+            ';', ':', '"', ',', '<', '.', '>', '/', '?'
+        ];
+        for (var i = 0; i < badDomainChar.length; i++) {
+            str = 'foobar@';
+            (function (str, c) {
+                str += c;
+                str += '.com';
+                it('should not be able to save an email with domain containing "' + c + '": ' + str, function(done) {
+                    app.personal_info.email = str;
+                    return app.save(function(err) {
+                        should.exist(err);
+                        done();
+                    });
+                });
+            })(str, badDomainChar[i]);
+        }
+        var badLocalChar = ['"', '(', ')', ',', ':', ';', '<', '>', '[', '\\', ']' ];
+        for (var i = 0; i < badLocalChar.length; i++) {
+            str = 'foobar@baz.com';
+            (function (str, c) {
+                str = c + str;
+                it('should not be able to save an email with local name containing "' + c + '": ' + str, function(done) {
+                    app.personal_info.email = str;
+                    return app.save(function(err) {
+                        should.exist(err);
+                        done();
+                    });
+                });
+            })(str, badLocalChar[i]);
+        }
     });
     describe('Street Match', function() {
+        var str = '1234 NW 40 ST FOO bar BAZ #1544';
+        (function (str) {
+            it('should be able to save a street with any of these characters: ' + str, function(done) {
+                app.personal_info.address.permanent.street = str;
+                app.save(done);
+            });
+        })(str);
+        var badStreetChar = ['!', '@', '`', '$', '%', '^', '&', '*', '(', ')',
+            '_', '=', '+', '~', '[', ']', '{', '}', '|', '\\', ';', ':', '"', ',',
+            '<', '.', '>', '/', '?'
+        ];
+        for (var i = 0; i < badStreetChar.length; i++) {
+            str = 'foo bar';
+            (function (str, c) {
+                str += c;
+                it('should not be able to save a street containing "' + c + '": ' + str, function(done) {
+                    app.personal_info.address.permanent.street =  str;
+                    return app.save(function(err) {
+                        should.exist(err);
+                        done();
+                    });
+                });
+            })(str, badStreetChar[i]);
+        }
     });
 });
