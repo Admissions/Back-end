@@ -351,6 +351,31 @@ describe('Application Model Unit Tests:', function() {
                 });
             });
         })(str);
+        var goodLocalChar = ['!', '#', '$', '%', '&', "'", '*', '+', '-', '/', '=', '?', '^', '_', '`', '{', '|', '}', '~' ];
+        for (var i = 0; i < goodLocalChar.length; i++) {
+            str = 'bar@baz.com';
+            (function (str, c) {
+                str = 'foo' + c + str;
+                it('should be able to save an email with local name containing "' + c + '": ' + str, function(done) {
+                    app.personal_info.email = str;
+                    app.save(done);
+                });
+            })(str, goodLocalChar[i]);
+        }
+        var badLocalChar = ['"', '(', ')', ',', ':', ';', '<', '>', '[', '\\', ']' ];
+        for (var i = 0; i < badLocalChar.length; i++) {
+            str = 'foobar@baz.com';
+            (function (str, c) {
+                str = c + str;
+                it('should not be able to save an email with local name containing "' + c + '": ' + str, function(done) {
+                    app.personal_info.email = str;
+                    return app.save(function(err) {
+                        should.exist(err);
+                        done();
+                    });
+                });
+            })(str, badLocalChar[i]);
+        }
         str = 'foobar@baz';
         (function (str) {
             it('should not be able to save an email with incomplete domain: ' + str, function(done) {
@@ -383,7 +408,7 @@ describe('Application Model Unit Tests:', function() {
         })(str);
         var badDomainChar = ['!', '@', '`', '#', '$',
             '%', '^', '&', '*', '(', ')', '_', '=', '+', '~', '[', ']', '{', '}', '|', '\\',
-            ';', ':', '"', ',', '<', '.', '>', '/', '?'
+            ';', ':', '"', ',', '<', '>', '/', '?'
         ];
         for (var i = 0; i < badDomainChar.length; i++) {
             str = 'foobar@';
@@ -398,20 +423,18 @@ describe('Application Model Unit Tests:', function() {
                     });
                 });
             })(str, badDomainChar[i]);
-        }
-        var badLocalChar = ['"', '(', ')', ',', ':', ';', '<', '>', '[', '\\', ']' ];
-        for (var i = 0; i < badLocalChar.length; i++) {
-            str = 'foobar@baz.com';
+            str = 'foobar@a';
             (function (str, c) {
-                str = c + str;
-                it('should not be able to save an email with local name containing "' + c + '": ' + str, function(done) {
+                str += c;
+                str += '.com';
+                it('should not be able to save an email with domain containing "' + c + '": ' + str, function(done) {
                     app.personal_info.email = str;
                     return app.save(function(err) {
                         should.exist(err);
                         done();
                     });
                 });
-            })(str, badLocalChar[i]);
+            })(str, badDomainChar[i]);
         }
     });
     describe('Street Match', function() {

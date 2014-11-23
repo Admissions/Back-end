@@ -29,7 +29,7 @@ var ssnMatch = [/^[0-9]{3}(-[0-9]{2}-|[0-9]{2})[0-9]{4}$/, 'SSN must be 3 digits
 var nameMatch = [/^[A-z-'']*$/, 'Valid names may only contain letters A to Z (upper and lowercase, ASCII only), hyphens, and apostraphes.'];
 var ufidMatch = [/^[0-9]{4}-?[0-9]{4}$/, 'UFID must be 8 digits, middle hyphen optional'];
 var phoneMatch = [/^[0-9]{3}-?[0-9]{3}-?[0-9]{4}$/, 'Phone numbers must be 10 digits, hyphens optional'];
-var emailMatch = [/.+\@.+\..+/, 'Invalid email address'];
+var emailMatch = [/^[0-9a-zA-Z\.!#$%&'\*\+\-/=\?\^_`\{\|\}~]+@[0-9a-zA-Z]{1}[0-9a-zA-Z\-\.]+\.[0-9a-zA-Z\-\.]+/, 'Invalid email address'];
 var streetMatch = [/^[A-z 0-9#]*$/, 'Street address may only contain alphanumeric characters, spaces, and (#)'];
 
 var ApplicationSchema = new Schema({
