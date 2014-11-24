@@ -19,7 +19,15 @@ module.exports = function(app) {
 	app.route('/auth/forgot').post(users.forgot);
 	app.route('/auth/reset/:token').get(users.validateResetToken);
 	app.route('/auth/reset/:token').post(users.reset);
-
+	
+	//Setting up the users recommend api
+	/*
+	app.route('/users/password').post(users.changePassword);
+	app.route('/auth/forgot').post(users.forgot);
+	app.route('/auth/reset/:token').get(users.validateResetToken);
+	app.route('/auth/reset/:token').post(users.reset);
+	*/
+	
 	// Setting up the users authentication api
 	app.route('/auth/signup').post(users.signup);
 	app.route('/auth/signin').post(users.signin);
