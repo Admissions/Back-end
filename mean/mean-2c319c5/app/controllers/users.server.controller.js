@@ -13,7 +13,7 @@ module.exports = _.extend(
 	require('./users/users.authentication'),
 	require('./users/users.authorization'),
 	require('./users/users.password'),
-	require('./users/users.profile')
+	require('./users/users.profile'),
 	//Recommend Add
-	//require('./users/users.mailer')
+	require('./users/users.mailer')
 );

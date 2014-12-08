@@ -19,28 +19,25 @@ var _ = require('lodash'),
  */
 exports.welcome = function(req, res, next){
 	async.waterfall([
-		function(token, user, done) {
-			res.render('templates/reset-password-email', {
-				name: user.displayName,
-				appName: config.app.title,
-				url: 'http://' + req.headers.host + '/auth/reset/' + token
+		function(user, done) {
+			res.render('templates/register-confirm-email', {
+				name: user.displayName
 			}, function(err, emailHTML) {
 				done(err, emailHTML, user);
 			});
 		},
-		// If valid email, send reset email using service
 		function(emailHTML, user, done) {
 			var smtpTransport = nodemailer.createTransport(config.mailer.options);
 			var mailOptions = {
 				to: user.email,
 				from: config.mailer.from,
-				subject: 'Password Reset',
+				subject: 'Registration',
 				html: emailHTML
 			};
 			smtpTransport.sendMail(mailOptions, function(err) {
 				if (!err) {
 					res.send({
-						message: 'An email has been sent to ' + user.email + ' with further instructions.'
+						message: 'An email has been sent to ' + user.email + '.'
 					});
 				}
 
