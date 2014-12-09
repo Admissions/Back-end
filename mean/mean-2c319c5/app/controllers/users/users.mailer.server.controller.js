@@ -18,15 +18,8 @@ var _ = require('lodash'),
  * Register user mail
  */
 exports.welcome = function(req, res, next){
-	var user = req.user;
 	console.log(req);
 	async.waterfall([
-		function(done) {
-			crypto.randomBytes(20, function(err, buffer) {
-				var token = buffer.toString('hex');
-				done(err, token);
-			});
-		},
 		function(user, done) {
 			res.render('templates/register-confirm-email', {
 				name: user.displayName
@@ -37,7 +30,7 @@ exports.welcome = function(req, res, next){
 		function(emailHTML, user, done) {
 			var smtpTransport = nodemailer.createTransport(config.mailer.options);
 			var mailOptions = {
-				to: 'nhgeunyreyn@gmail.com',
+				to: user.email,
 				from: config.mailer.from,
 				subject: 'Registration',
 				html: emailHTML
@@ -48,11 +41,7 @@ exports.welcome = function(req, res, next){
 						message: 'An email has been sent to ' + user.email + '.'
 					});
 				}
-				else{
-					res.send({
-						message: 'An email could not be sent.'
-					});
-				}
+
 				done(err);
 			});
 		}
