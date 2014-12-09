@@ -18,6 +18,7 @@ var _ = require('lodash'),
  * Register user mail
  */
 exports.welcome = function(req, res, next){
+	console.log(req);
 	async.waterfall([
 		function(user, done) {
 			res.render('templates/register-confirm-email', {
