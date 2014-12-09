@@ -1,4 +1,7 @@
 'use strict';
+/*jshint quotmark:false*/
+/*jshint loopfunc:true*/
+/*jshint shadow:true*/
 /**
  * Module dependencies.
  */
@@ -89,7 +92,7 @@ describe('Application Model Unit Tests:', function() {
         for (var i = 0; i < badNameChar.length; i++) {
             (function(str) {
                 it('should not be able to save names with "' + str + '" in them', function(done) {
-                    app.first = str
+                    app.first = str;
                     return app.save(function(err) {
                         should.exist(err);
                         done();
