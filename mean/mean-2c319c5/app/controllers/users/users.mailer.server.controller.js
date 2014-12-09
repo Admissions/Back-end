@@ -18,19 +18,19 @@ var _ = require('lodash'),
  * Register user mail
  */
 exports.welcome = function(req, res, next){
-	console.log(req);
 	async.waterfall([
-		function(user, done) {
+		function(done) {
 			res.render('templates/register-confirm-email', {
-				name: user.displayName
+				name: req.body.user.username
 			}, function(err, emailHTML) {
-				done(err, emailHTML, user);
+				if (err) done(err);
+				else done(null, emailHTML, req.body.user);
 			});
 		},
 		function(emailHTML, user, done) {
 			var smtpTransport = nodemailer.createTransport(config.mailer.options);
 			var mailOptions = {
-				to: 'nhgeunyreyn@gmail.com',
+				to: user.email, //'nhgeunyreyn@gmail.com',
 				from: config.mailer.from,
 				subject: 'Registration',
 				html: emailHTML
@@ -40,13 +40,18 @@ exports.welcome = function(req, res, next){
 					res.send({
 						message: 'An email has been sent to ' + user.email + '.'
 					});
+					done(null);
+				} else {
+					console.log(err);
+					done(err);
 				}
-
-				done(err);
 			});
 		}
 	], function(err) {
-		if (err) return next(err);
+		if (err) {
+			console.log('waterfall failure');
+			return next(err);
+		}
 	});
 };
 
