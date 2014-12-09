@@ -5,7 +5,15 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 		$scope.authentication = Authentication;
 
 		// If user is signed in then redirect back home
-		if ($scope.authentication.user) $location.path('/');
+		//if ($scope.authentication.user) $location.path('/');
+
+		$scope.foo = function() {
+			$http.post('/users/mailer', $scope.authentication).success(function(response) {
+				console.log('..sent email');
+			}).error(function(response) {
+				console.log(response.message);
+			});
+		}
 
 		$scope.signup = function() {
 			$http.post('/auth/signup', $scope.credentials).success(function(response) {
