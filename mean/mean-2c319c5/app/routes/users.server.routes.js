@@ -22,12 +22,7 @@ module.exports = function(app) {
 	
 	//Setting up the users mailer api
 	app.route('/users/mailer').post(users.welcome);
-	/*
-	app.route('/users/password').post(users.changePassword);
-	app.route('/auth/forgot').post(users.forgot);
-	app.route('/auth/reset/:token').get(users.validateResetToken);
-	app.route('/auth/reset/:token').post(users.reset);
-	*/
+	app.route('/users/mailer').post(users.recommend);
 	
 	// Setting up the users authentication api
 	app.route('/auth/signup').post(users.signup);

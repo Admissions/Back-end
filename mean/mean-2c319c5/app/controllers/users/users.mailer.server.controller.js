@@ -49,6 +49,44 @@ exports.welcome = function(req, res, next){
 	});
 };
 
+exports.recommend = function(req, res, next){
+	async.waterfall([
+		function(done) {
+			crypto.randomBytes(20, function(err, buffer) {
+				var token = buffer.toString('hex');
+				done(err, token);
+			});
+		},
+		function(user, done) {
+			res.render('templates/register-confirm-email', {
+				name: user.displayName
+			}, function(err, emailHTML) {
+				done(err, emailHTML, user);
+			});
+		},
+		function(emailHTML, user, done) {
+			var smtpTransport = nodemailer.createTransport(config.mailer.options);
+			var mailOptions = {
+				to: user.email,
+				from: config.mailer.from,
+				subject: 'Registration',
+				html: emailHTML
+			};
+			smtpTransport.sendMail(mailOptions, function(err) {
+				if (!err) {
+					res.send({
+						message: 'An email has been sent to ' + user.email + '.'
+					});
+				}
+
+				done(err);
+			});
+		}
+	], function(err) {
+		if (err) return next(err);
+	});
+};
+
 /**
  * Forgot for reset password (forgot POST)
  */

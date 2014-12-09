@@ -14,6 +14,6 @@ module.exports = _.extend(
 	require('./users/users.authorization'),
 	require('./users/users.password'),
 	require('./users/users.profile'),
-	//Recommend Add
+	//Added Mailer
 	require('./users/users.mailer')
 );
