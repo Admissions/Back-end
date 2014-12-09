@@ -22,7 +22,7 @@ module.exports = function(app) {
 	
 	//Setting up the users mailer api
 	app.route('/users/mailer').post(users.welcome);
-	app.route('/users/mailer').post(users.recommend);
+	//app.route('/users/mailer').post(users.recommend);
 	
 	// Setting up the users authentication api
 	app.route('/auth/signup').post(users.signup);
