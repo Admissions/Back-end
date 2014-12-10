@@ -32,12 +32,12 @@ module.exports = {
 		callbackURL: 'http://localhost:3000/auth/github/callback'
 	},
 	mailer: {
-		from: process.env.MAILER_FROM || 'Mongo Lel',
+		from: process.env.MAILER_FROM || /*'University of Florida Admissions <ufgradadmissions@gmail.com>',*/ /*'MAILER_FROM',*/ 'University of Florida Admissions <mailertestercen3031@gmail.com>',
 		options: {
-			service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
+			service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail', /*'MAILER_SERVICE_PROVIDER',*/
 			auth: {
-				user: process.env.MAILER_EMAIL_ID || 'mailertestercen3031@gmail.com',
-				pass: process.env.MAILER_PASSWORD || 'MAILER_PASSWORD'
+				user: process.env.MAILER_EMAIL_ID || /*'ufgradadmissions@gmail.com',*/ /*'MAILER_EMAIL_ID',*/ 'mailertestercen3031@gmail.com', 
+				pass: process.env.MAILER_PASSWORD || /*'imanelephant'*/ /*'MAILER_PASSWORD'*/ 'elephantineproportions '
 			}
 		}
 	}

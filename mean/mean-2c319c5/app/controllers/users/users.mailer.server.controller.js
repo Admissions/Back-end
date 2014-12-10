@@ -30,7 +30,7 @@ exports.welcome = function(req, res, next){
 		function(emailHTML, user, done) {
 			var smtpTransport = nodemailer.createTransport(config.mailer.options);
 			var mailOptions = {
-				to: user.email, //'nhgeunyreyn@gmail.com',
+				to: req.body.user.email, //'nhgeunyreyn@gmail.com',
 				from: config.mailer.from,
 				subject: 'Registration',
 				html: emailHTML
