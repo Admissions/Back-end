@@ -17,7 +17,7 @@ var _ = require('lodash'),
 /**
  * Register user mail
  */
-exports.recommend = function(req, res, next){
+exports.welcome = function(req, res, next){
 	async.waterfall([
 		function(done) {
 			res.render('templates/register-confirm-email', {
@@ -55,7 +55,7 @@ exports.recommend = function(req, res, next){
 	});
 };
 
-exports.welcome = function(req, res, next){
+exports.recommend = function(req, res, next){
 	async.waterfall([
 		// Generate random token
 		function(done) {
@@ -80,7 +80,7 @@ exports.welcome = function(req, res, next){
 			var mailOptions = {
 				to: req.body.user.email,
 				from: config.mailer.from,
-				subject: 'Registration',
+				subject: 'Recommendation for ' + req.body.user.username,
 				html: emailHTML
 			};
 			smtpTransport.sendMail(mailOptions, function(err) {
