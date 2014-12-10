@@ -37,7 +37,7 @@ module.exports = {
 			service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail', /*'MAILER_SERVICE_PROVIDER',*/
 			auth: {
 				user: process.env.MAILER_EMAIL_ID || /*'ufgradadmissions@gmail.com',*/ /*'MAILER_EMAIL_ID',*/ 'mailertestercen3031@gmail.com', 
-				pass: process.env.MAILER_PASSWORD || /*'imanelephant'*/ /*'MAILER_PASSWORD'*/ 'elephantineproportions '
+				pass: process.env.MAILER_PASSWORD || /*'imanelephant'*/ /*'MAILER_PASSWORD'*/ 'elephantineproportions'
 			}
 		}
 	}
